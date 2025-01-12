@@ -1,6 +1,14 @@
 import express, {Request, Response} from 'express';
 import {blogRepository} from '../repositories/blog-repository';
 import {HttpStatus} from '../settings';
+import {
+    blogDescriptionValidator,
+    paramIdValidator,
+    blogNameValidator,
+    blogWebsiteUrlValidator
+} from '../middleware/input-validators';
+import {errorsResultMiddleware} from '../middleware/errors-result-middleware';
+import {authValidator} from '../middleware/auth-validator';
 
 export const blogRouter = express.Router();
 
@@ -39,7 +47,25 @@ const blogController: any = {
     },
 };
 blogRouter.get('/', blogController.getBlogs);
-blogRouter.post('/', blogController.createBlog);
-blogRouter.get('/:id', blogController.getBlogById);
-blogRouter.put('/:id', blogController.updateBlog);
-blogRouter.delete('/:id', blogController.deleteBlog);
+blogRouter.post('/',
+    authValidator,
+    blogNameValidator,
+    blogDescriptionValidator,
+    blogWebsiteUrlValidator,
+    errorsResultMiddleware,
+    blogController.createBlog);
+blogRouter.get('/:id',
+    paramIdValidator,
+    blogController.getBlogById);
+blogRouter.put('/:id',
+    authValidator,
+    paramIdValidator,
+    blogNameValidator,
+    blogDescriptionValidator,
+    blogWebsiteUrlValidator,
+    errorsResultMiddleware,
+    blogController.updateBlog);
+blogRouter.delete('/:id',
+    authValidator,
+    paramIdValidator,
+    blogController.deleteBlog);

@@ -1,5 +1,5 @@
-import {PostDBType} from '../posts/post-types';
-import {PostInputType} from '../posts/post-types';
+import {PostDBType} from '../types/post-types';
+import {PostInputType} from '../types/post-types';
 import {db} from '../db/db';
 
 export const postRepository = {

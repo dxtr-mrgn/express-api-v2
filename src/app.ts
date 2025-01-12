@@ -2,8 +2,8 @@ import express, {Request, Response} from 'express';
 import {HttpStatus, SETTINGS} from './settings';
 import {postRepository} from './repositories/post-repository';
 import {blogRepository} from './repositories/blog-repository';
-import {postRouter} from './posts/post-controller';
-import {blogRouter} from './blogs/blog-controller';
+import {postRouter} from './controllers/post-controller';
+import {blogRouter} from './controllers/blog-controller';
 export const app = express();
 
 app.use(express.json());

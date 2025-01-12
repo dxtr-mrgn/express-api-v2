@@ -1,6 +1,15 @@
 import express, {Request, Response} from 'express';
 import {HttpStatus} from '../settings';
 import {postRepository} from '../repositories/post-repository';
+import {errorsResultMiddleware} from '../middleware/errors-result-middleware';
+import {
+    postBlogIdValidator,
+    postContentValidator,
+    paramIdValidator,
+    postShortDescriptionValidator,
+    postTitleValidator
+} from '../middleware/input-validators';
+import {authValidator} from '../middleware/auth-validator';
 
 export const postRouter = express.Router();
 
@@ -39,7 +48,27 @@ const postController = {
     },
 };
 postRouter.get('/', postController.getPosts);
-postRouter.post('/', postController.createPost);
-postRouter.get('/:id', postController.getPostById);
-postRouter.put('/:id', postController.updatePost);
-postRouter.delete('/:id', postController.deletePost);
+postRouter.post('/',
+    authValidator,
+    postTitleValidator,
+    postShortDescriptionValidator,
+    postContentValidator,
+    postBlogIdValidator,
+    errorsResultMiddleware,
+    postController.createPost);
+postRouter.get('/:id',
+    paramIdValidator,
+    postController.getPostById);
+postRouter.put('/:id',
+    authValidator,
+    paramIdValidator,
+    postTitleValidator,
+    postShortDescriptionValidator,
+    postContentValidator,
+    postBlogIdValidator,
+    errorsResultMiddleware,
+    postController.updatePost);
+postRouter.delete('/:id',
+    authValidator,
+    paramIdValidator,
+    postController.deletePost);

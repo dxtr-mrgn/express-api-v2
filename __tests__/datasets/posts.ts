@@ -8,7 +8,7 @@ export const invalidTitlePost = {
     error: {
         errorsMessages: [
             {
-                message: 'title is invalid',
+                message: 'title should be string',
                 field: 'title'
             }
         ]
@@ -24,7 +24,7 @@ export const invalidDescPost = {
     error: {
         errorsMessages: [
             {
-                message: 'shortDescription is invalid',
+                message: 'shortDescription should be string',
                 field: 'shortDescription'
             }
         ]
@@ -40,7 +40,7 @@ export const invalidContentPost = {
     error: {
         errorsMessages: [
             {
-                message: 'content is invalid',
+                message: 'content should be string',
                 field: 'content'
             }
         ]
@@ -56,7 +56,7 @@ export const invalidBlogIdPost = {
     error: {
         errorsMessages: [
             {
-                message: 'blogId is invalid',
+                message: 'blogId should be string',
                 field: 'blogId'
             }
         ]
@@ -71,7 +71,7 @@ export const missingTitlePost = {
     error: {
         errorsMessages: [
             {
-                message: 'title is missing',
+                message: 'title is required',
                 field: 'title'
             }
         ]
@@ -86,7 +86,7 @@ export const missingDescPost = {
     error: {
         errorsMessages: [
             {
-                message: 'shortDescription is missing',
+                message: 'shortDescription is required',
                 field: 'shortDescription'
             }
         ]
@@ -101,7 +101,7 @@ export const missingContentPost = {
     error: {
         errorsMessages: [
             {
-                message: 'content is missing',
+                message: 'content is required',
                 field: 'content'
             }
         ]
@@ -116,7 +116,7 @@ export const missingIdPost = {
     error: {
         errorsMessages: [
             {
-                message: 'blogId is missing',
+                message: 'blogId is required',
                 field: 'blogId'
             }
         ]
@@ -132,7 +132,7 @@ export const tooLongTitlePost = {
     error: {
         errorsMessages: [
             {
-                message: 'title is too long',
+                message: 'title should contain 1 - 30 characters',
                 field: 'title'
             }
         ]
@@ -148,7 +148,7 @@ export const tooLongDescPost = {
     error: {
         errorsMessages: [
             {
-                message: 'shortDescription is too long',
+                message: 'shortDescription should contain 1 - 100 characters',
                 field: 'shortDescription'
             }
         ]
@@ -164,7 +164,7 @@ export const tooLongContentPost = {
     error: {
         errorsMessages: [
             {
-                message: 'content is too long',
+                message: 'content should contain 1 - 1000 characters',
                 field: 'content'
             }
         ]

@@ -7,7 +7,7 @@ export const invalidNameBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'name is invalid',
+                message: 'name should be string',
                 field: 'name'
             }
         ]
@@ -22,7 +22,7 @@ export const invalidDescBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'description is invalid',
+                message: 'description should be string',
                 field: 'description'
             }
         ]
@@ -37,7 +37,7 @@ export const invalidUrlBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'website url is invalid',
+                message: 'website url should be string',
                 field: 'websiteUrl'
             }
         ]
@@ -51,7 +51,7 @@ export const missingNameBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'name is missing',
+                message: 'name is required',
                 field: 'name'
             }
         ]
@@ -59,13 +59,13 @@ export const missingNameBlog = {
 };
 export const missingDescBlog = {
     payload: {
-        'name': 1,
+        'name': 'valid name',
         'websiteUrl': 'https://1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb-3eFqM9GnFr3q.kKX8WgmbfmBjIMUIFDjMZA'
     },
     error: {
         errorsMessages: [
             {
-                message: 'description is missing',
+                message: 'description is required',
                 field: 'description'
             }
         ]
@@ -73,13 +73,13 @@ export const missingDescBlog = {
 };
 export const missingUrlBlog = {
     payload: {
-        'name': 1,
+        'name': 'valid name',
         'description': 'string'
     },
     error: {
         errorsMessages: [
             {
-                message: 'website url is missing',
+                message: 'website url is required',
                 field: 'websiteUrl'
             }
         ]
@@ -94,12 +94,12 @@ export const tooLongNameBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'name is too long',
+                message: 'name should contain 1 - 15 characters',
                 field: 'name'
             }
         ]
     }
-}
+};
 export const tooLongDescBlog = {
     payload: {
         'name': 'valid',
@@ -109,31 +109,46 @@ export const tooLongDescBlog = {
     error: {
         errorsMessages: [
             {
-                message: 'description is too long',
+                message: 'description should contain 1 - 500 characters',
                 field: 'description'
             }
         ]
     }
-}
+};
 export const tooLongUrlBlog = {
     payload: {
-        'name': 1,
+        'name': 'valid name',
         'description': 'string',
         'websiteUrl': 'https://1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb-3eFqM9GnFr3q.kKX8WgmbfmBjIMUIFDjMZAhttps://1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb-3eFqM9GnFr3q'
     },
     error: {
         errorsMessages: [
             {
-                message: 'website url is too long',
+                message: 'website url should contain 1 - 100 characters',
                 field: 'websiteUrl'
             }
         ]
     }
-}
+};
+export const incorrectUrlPattern = {
+    payload: {
+        'name': 'valid name',
+        'description': 'string',
+        'websiteUrl': '1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb'
+    },
+    error: {
+        errorsMessages: [
+            {
+                message: 'website url must match URL pattern',
+                field: 'websiteUrl'
+            }
+        ]
+    }
+};
 export const validBlog = {
     payload: {
         'name': 'valid name',
         'description': 'valid desc',
-        'websiteUrl': 'valid URL'
+        'websiteUrl': 'https://1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb-3eFqM9GnFr3q.kKX8WgmbfmBjIMUIFDjMZA'
     }
-}
+};

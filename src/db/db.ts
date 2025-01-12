@@ -1,5 +1,5 @@
-import {BlogDBType} from '../blogs/blog-types';
-import {PostDBType} from '../posts/post-types';
+import {BlogDBType} from '../types/blog-types';
+import {PostDBType} from '../types/post-types';
 
 export type DBType = {
     blogs: BlogDBType[],
