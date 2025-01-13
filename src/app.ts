@@ -9,7 +9,7 @@ export const app = express();
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({'Version': '1.0'});
+    res.send({'Version': '2.0'});
 });
 
 app.delete(SETTINGS.ALL_DATA, (req: Request, res: Response) => {
