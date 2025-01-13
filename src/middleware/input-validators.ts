@@ -101,12 +101,6 @@ export const postBlogIdValidator = body('blogId')
     .notEmpty().withMessage('blogId is required')
     .isString().withMessage('blogId should be string')
     .custom(async (value) => { // Make the custom function asynchronous
-        if (typeof value !== 'string') {
-            throw new Error('blogId should be string');
-        }
-        if (!isNaN(Number(value))) {
-            throw new Error('blogId should be string');
-        }
         const blog = await db.blogs.find(blog => blog.id === value); // Await the promise here
         if (!blog) {
             throw new Error('blogId is invalid');

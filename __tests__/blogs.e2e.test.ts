@@ -6,6 +6,7 @@ import {
     invalidDescBlog,
     invalidNameBlog,
     invalidUrlBlog,
+    missingAllBlog,
     missingDescBlog,
     missingNameBlog,
     missingUrlBlog,
@@ -99,6 +100,19 @@ describe('Blogs', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, incorrectUrlPattern.error);
         });
+        it('Create a Blog - 400 empty payload', async () => {
+            await api()
+                .post(SETTINGS.BLOGS)
+                .send(missingAllBlog.payload)
+                .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
+                .expect(HttpStatus.BAD_REQUEST, missingAllBlog.error);
+        });
+        it('Create a Blog - 401 no auth', async () => {
+            await api()
+                .post(SETTINGS.BLOGS)
+                .send(validBlog.payload)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
         it('Create a Blog - 401 invalid login', async () => {
             await api()
                 .post(SETTINGS.BLOGS)
@@ -111,6 +125,13 @@ describe('Blogs', () => {
                 .post(SETTINGS.BLOGS)
                 .send(validBlog.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD + ' ')
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
+        it('Create a Blog - 401 invalid login and password', async () => {
+            await api()
+                .post(SETTINGS.BLOGS)
+                .send(validBlog.payload)
+                .auth(SETTINGS.LOGIN + ' ', SETTINGS.PASSWORD + ' ')
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Create a Blog - 200', async () => {
@@ -271,18 +292,10 @@ describe('Blogs', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, incorrectUrlPattern.error);
         });
-        it('Update a Blog - 401 invalid login', async () => {
+        it('Update a Blog - 401 no auth', async () => {
             await api()
                 .put(newBlog1IdUrl)
                 .send(validBlog.payload)
-                .auth(SETTINGS.LOGIN + ' ', SETTINGS.PASSWORD)
-                .expect(HttpStatus.UNAUTHORIZED);
-        });
-        it('Update a Blog - 401 invalid password', async () => {
-            await api()
-                .put(newBlog1IdUrl)
-                .send(validBlog.payload)
-                .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD + ' ')
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Get a Blog - 200', async () => {
@@ -354,16 +367,9 @@ describe('Blogs', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.NOT_FOUND);
         });
-        it('Delete a Blog - 401 invalid login', async () => {
+        it('Delete a Blog - 401 no auth', async () => {
             await api()
                 .delete(newBlog1IdUrl)
-                .auth(SETTINGS.LOGIN + ' ', SETTINGS.PASSWORD)
-                .expect(HttpStatus.UNAUTHORIZED);
-        });
-        it('Delete a Blog - 401 invalid password', async () => {
-            await api()
-                .delete(newBlog1IdUrl)
-                .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD + ' ')
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Delete a Blog - 204', async () => {

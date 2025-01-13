@@ -85,6 +85,25 @@ export const missingUrlBlog = {
         ]
     }
 };
+export const missingAllBlog = {
+    payload: {},
+    error: {
+        errorsMessages: [
+            {
+                message: 'name is required',
+                field: 'name'
+            },
+            {
+                message: 'description is required',
+                field: 'description'
+            },
+            {
+                message: 'website url is required',
+                field: 'websiteUrl'
+            }
+        ]
+    }
+};
 export const tooLongNameBlog = {
     payload: {
         'name': 'https://1U_6htpDD23G7sy-AstWRa4UV6DPN-YTwEVJABFYvYmN8cryBAA3hihb-3eFqM9GnFr3q.kKX8WgmbfmBjIMUIFDjMZA',
