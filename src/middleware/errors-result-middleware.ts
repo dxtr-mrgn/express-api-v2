@@ -17,7 +17,7 @@ export const errorsResultMiddleware = (req: Request, res: Response, next: NextFu
             return;
         }
 
-        res.status(HttpStatus.BAD_REQUEST).send({ errorsMessages: filteredError});
+        res.status(HttpStatus.BAD_REQUEST).send({errorsMessages: filteredError});
         return;
     }
     next();

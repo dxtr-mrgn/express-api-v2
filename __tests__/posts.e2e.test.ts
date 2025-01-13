@@ -16,6 +16,7 @@ import {
     validPost
 } from './datasets/posts';
 import {db} from '../src/db/db';
+import {validBlog} from './datasets/blogs';
 
 const api = () => request(app);
 
@@ -32,10 +33,8 @@ describe('Posts', () => {
         console.log('DB.posts: ' + db.posts);
     });
 
-    let newPost1: any = {}, newPost2: any = {}, postToUpdate: any = {};
-    let postsURL: string = '', newPost1IdUrl: string = '';
+    let newPost1: any = {}, newPost2: any = {}, postToUpdate: any = {}, newPost1IdUrl: string = '';
     describe('POST /posts', () => {
-        postsURL = SETTINGS.POSTS;
         it('Create a Post - 400 invalid Title', async () => {
             await api()
                 .post(SETTINGS.POSTS)
@@ -114,20 +113,27 @@ describe('Posts', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, tooLongContentPost.error);
         });
-        // it('Create a Post - 401 invalid login', async () => {
-        //     await api()
-        //         .post(SETTINGS.POSTS)
-        //         .send(validPost.payload)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
-        // it('Create a Post - 401 invalid password', async () => {
-        //     await api()
-        //         .post(SETTINGS.POSTS)
-        //         .send(validPost.payload)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
+        it('Create a Post - 401 invalid login', async () => {
+            await api()
+                .post(SETTINGS.POSTS)
+                .send(validPost.payload)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
+        it('Create a Post - 401 invalid password', async () => {
+            await api()
+                .post(SETTINGS.POSTS)
+                .send(validPost.payload)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
         it('Create a Post - 200', async () => {
-            console.log('URL: ', postsURL);
+            const blog = await api()
+                .post(SETTINGS.BLOGS)
+                .send(validBlog.payload)
+                .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
+                .expect(HttpStatus.CREATED);
+
+            validPost.payload.blogId = blog.body.id.toString();
+            console.log(validPost.payload);
 
             const res = await api()
                 .post(SETTINGS.POSTS)
@@ -190,16 +196,16 @@ describe('Posts', () => {
                 .get(SETTINGS.POSTS + '/' + 1234)
                 .expect(HttpStatus.NOT_FOUND);
         });
-        // it('Get a Post - 401 invalid login', async () => {
-        //     await api()
-        //         .post(newPost1IdUrl)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
-        // it('Get a Post - 401 invalid password', async () => {
-        //     await api()
-        //         .post(newPost1IdUrl)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
+        it('Get a Post - 401 invalid login', async () => {
+            await api()
+                .post(newPost1IdUrl)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
+        it('Get a Post - 401 invalid password', async () => {
+            await api()
+                .post(newPost1IdUrl)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
         it('Get a Post - 200', async () => {
             newPost1IdUrl = SETTINGS.POSTS + '/' + newPost1.id;
             const res = await api()
@@ -314,18 +320,18 @@ describe('Posts', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, tooLongContentPost.error);
         });
-        // it('Update a Post - 401 invalid login', async () => {
-        //     await api()
-        //         .put(newPost1IdUrl)
-        //         .send(validPost.payload)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
-        // it('Update a Post - 401 invalid password', async () => {
-        //     await api()
-        //         .put(newPost1IdUrl)
-        //         .send(validPost.payload)
-        //         .expect(HttpStatus.UNAUTHORIZED);
-        // });
+        it('Update a Post - 401 invalid login', async () => {
+            await api()
+                .put(newPost1IdUrl)
+                .send(validPost.payload)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
+        it('Update a Post - 401 invalid password', async () => {
+            await api()
+                .put(newPost1IdUrl)
+                .send(validPost.payload)
+                .expect(HttpStatus.UNAUTHORIZED);
+        });
         it('Get a Post1 body for update', async () => {
             const res = await api()
                 .get(newPost1IdUrl)

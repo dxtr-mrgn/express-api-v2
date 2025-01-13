@@ -13,7 +13,7 @@ export const blogRepository = {
             description: blogInput.description,
             websiteUrl: blogInput.websiteUrl
         }
-        db.blogs.push(newBlog)
+        db.blogs = [...db.blogs, newBlog]
         return newBlog
     },
     async updateBlog(id: string, blogUpdate: BlogInputType) {

@@ -2,7 +2,7 @@ export type  PostInputType = {
     title: string,
     shortDescription: string,
     content: string,
-    blogId: string,
+    blogId: string
 }
 
 export type  PostDBType = {
@@ -11,5 +11,5 @@ export type  PostDBType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string
+    blogName: string | undefined
 }

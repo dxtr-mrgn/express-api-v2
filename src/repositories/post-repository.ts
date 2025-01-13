@@ -1,13 +1,14 @@
 import {PostDBType} from '../types/post-types';
 import {PostInputType} from '../types/post-types';
 import {db} from '../db/db';
+import {BlogDBType} from '../types/blog-types';
 
 export const postRepository = {
     async deleteAllPosts() {
         db.posts = [];
     },
     async createPost(postInput: PostInputType) {
-        const blog = db.blogs.find(blog => blog.id === postInput.blogId)
+        const blog: BlogDBType | undefined = db.blogs.find(blog => blog.id === postInput.blogId)
 
         const newPost: PostDBType = {
             id: Date.now() + Math.random().toString(),
@@ -15,7 +16,7 @@ export const postRepository = {
             shortDescription: postInput.shortDescription,
             content: postInput.content,
             blogId: postInput.blogId,
-            blogName: blog?.name || ""
+            blogName: blog?.name
         }
         db.posts = [...db.posts, newPost];
         return newPost
