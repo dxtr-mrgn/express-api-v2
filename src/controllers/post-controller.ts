@@ -3,11 +3,11 @@ import {HttpStatus} from '../settings';
 import {postRepository} from '../repositories/post-repository';
 import {errorsResultMiddleware} from '../middleware/errors-result-middleware';
 import {
-    postBlogIdValidator,
+    // postBlogIdValidator,
     postContentValidator,
     paramIdValidator,
     postShortDescriptionValidator,
-    postTitleValidator
+    postTitleValidator, postBlogIdValidator
 } from '../middleware/input-validators';
 import {authValidator} from '../middleware/auth-validator';
 
@@ -19,15 +19,15 @@ const postController = {
         res.status(HttpStatus.OK).send(posts);
     },
     async getPostById(req: Request, res: Response) {
-        const post = await postRepository.findPosts(req.params.id);
-        if (post) {
-            res.status(HttpStatus.OK).send(post);
-        } else {
+        const post = (await postRepository.findPosts(req.params.id))[0];
+        if (!post) {
             res.sendStatus(HttpStatus.NOT_FOUND);
+        } else {
+            res.status(HttpStatus.OK).send(post);
         }
     },
     async createPost(req: Request, res: Response) {
-        const post = await postRepository.createPost(req.body);
+        const post = (await postRepository.createPost(req.body))[0];
         if (post) res.status(HttpStatus.CREATED).send(post);
     },
     async updatePost(req: Request, res: Response) {

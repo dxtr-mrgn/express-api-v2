@@ -1,14 +1,18 @@
-import {PostDBType} from '../types/post-types';
-import {PostInputType} from '../types/post-types';
-import {db} from '../db/db';
-import {BlogDBType} from '../types/blog-types';
+import {PostDBType, PostInputType} from '../types/post-types';
+import {client} from '../db/mongodb';
+import {ObjectId} from 'mongodb';
+import {blogCollection} from './blog-repository';
+import {SETTINGS} from '../settings';
+
+const postCollection = client.db(SETTINGS.DB_NAME).collection('posts');
+console.log("XXX DB Name:", SETTINGS.DB_NAME);
 
 export const postRepository = {
     async deleteAllPosts() {
-        db.posts = [];
+        await postCollection.deleteMany({});
     },
     async createPost(postInput: PostInputType) {
-        const blog: BlogDBType | undefined = db.blogs.find(blog => blog.id === postInput.blogId)
+        const blog: any = (await blogCollection.find({id: postInput.blogId}, {projection: {_id: 0}}).toArray())[0];
 
         const newPost: PostDBType = {
             id: Date.now() + Math.random().toString(),
@@ -17,35 +21,26 @@ export const postRepository = {
             content: postInput.content,
             blogId: postInput.blogId,
             blogName: blog?.name
-        }
-        db.posts = [...db.posts, newPost];
-        return newPost
+        };
+
+        const res = await postCollection.insertOne(newPost);
+        return await postCollection.find({_id: new ObjectId(res.insertedId)}, {projection: {_id: 0}}).toArray();
     },
     async updatePost(id: string, postUpdate: PostInputType) {
-        for (let i = 0; i < db.posts.length; i++) {
-            if (db.posts[i].id === id) {
-                db.posts[i] = {...db.posts[i], ...postUpdate}
-                return true
-            }
-        }
-        return false
-    },
-    async findPosts(id?: string) {
-        const posts = db.posts
+        const res: any = await postCollection.updateOne({id}, {$set: postUpdate});
 
+        return res.modifiedCount === 1;
+    },
+    async findPosts(id?: string | undefined) {
         if (!id) {
-            return posts;
+            return await postCollection.find({}, {projection: {_id: 0}}).toArray();
         } else {
-            return posts.find(blog => blog.id === id);
+            return await postCollection.find({id}, {projection: {_id: 0}}).toArray();
         }
     },
     async deletePost(id: string) {
-        for (let i = 0; i < db.posts.length; i++) {
-            if (db.posts[i].id === id) {
-                db.posts.splice(i, 1);
-                return true
-            }
-        }
-        return false
+        const res = await postCollection.deleteOne({id});
+
+        return res.deletedCount;
     }
 };

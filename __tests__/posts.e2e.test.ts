@@ -15,8 +15,8 @@ import {
     tooLongTitlePost,
     validPost
 } from './datasets/posts';
-import {db} from '../src/db/db';
 import {validBlog} from './datasets/blogs';
+import {client} from '../src/db/mongodb';
 
 const api = () => request(app);
 
@@ -24,17 +24,16 @@ const api = () => request(app);
 describe('Posts', () => {
     beforeAll(async () => {
         await api()
-            .delete(SETTINGS.ALL_DATA)
+            .delete(SETTINGS.API.ALL_DATA)
             .expect(HttpStatus.NO_CONTENT);
         await api()
-            .get(SETTINGS.POSTS)
+            .get(SETTINGS.API.POSTS)
             .expect(HttpStatus.OK, []);
 
-        console.log('The posts have been deleted');
-        console.log('DB.posts: ' + db.posts);
+        console.log('All the posts have been deleted');
 
         const blog = await api()
-            .post(SETTINGS.BLOGS)
+            .post(SETTINGS.API.BLOGS)
             .send(validBlog.payload)
             .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
             .expect(HttpStatus.CREATED);
@@ -47,70 +46,70 @@ describe('Posts', () => {
     describe('POST /posts', () => {
         it('Create a Post - 400 invalid Title', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(invalidTitlePost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, invalidTitlePost.error);
         });
         it('Create a Post - 400 invalid Desc', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(invalidDescPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, invalidDescPost.error);
         });
         it('Create a Post - 400 invalid Content', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(invalidContentPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, invalidContentPost.error);
         });
         it('Create a Post - 400 invalid Blog Id', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(invalidBlogIdPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, invalidBlogIdPost.error);
         });
         it('Create a Post - 400 missing Title', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(missingTitlePost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, missingTitlePost.error);
         });
         it('Create a Post - 400 missing Desc', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(missingDescPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, missingDescPost.error);
         });
         it('Create a Post - 400 missing Content', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(missingContentPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, missingContentPost.error);
         });
         it('Create a Post - 400 missing Blog Id', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(missingIdPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, missingIdPost.error);
         });
         it('Create a Post - 400 too long Title', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(tooLongTitlePost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, tooLongTitlePost.error);
         });
         it('Create a Post - 400 too long Desc', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(tooLongDescPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, tooLongDescPost.error);
@@ -118,48 +117,48 @@ describe('Posts', () => {
         });
         it('Create a Post - 400 too long Content', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(tooLongContentPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, tooLongContentPost.error);
         });
         it('Create a Post - 400 empty payload', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(missingAllPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.BAD_REQUEST, missingAllPost.error);
         });
         it('Create a Post - 401 no auth', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(validPost.payload)
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Create a Post - 401 invalid login', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN + ' ', SETTINGS.PASSWORD)
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Create a Post - 401 invalid password', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD + ' ')
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Create a Post - 401 invalid login and password', async () => {
             await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN + ' ', SETTINGS.PASSWORD + ' ')
                 .expect(HttpStatus.UNAUTHORIZED);
         });
         it('Create a Post - 200', async () => {
             const res = await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .send(validPost.payload);
 
@@ -183,7 +182,7 @@ describe('Posts', () => {
         });
         it('Create a Post - 200 - Duplicate', async () => {
             const res = await api()
-                .post(SETTINGS.POSTS)
+                .post(SETTINGS.API.POSTS)
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.CREATED);
@@ -206,20 +205,20 @@ describe('Posts', () => {
     describe('GET /posts', () => {
         it('GET /posts', async () => {
             await api()
-                .get(SETTINGS.POSTS)
+                .get(SETTINGS.API.POSTS)
                 .expect(HttpStatus.OK, [newPost1, newPost2]);
         });
     });
     describe('GET /posts/:id', () => {
-        newPost1IdUrl = SETTINGS.POSTS + '/' + newPost1.id;
+        newPost1IdUrl = SETTINGS.API.POSTS + '/' + newPost1.id;
 
         it('Get a Post - 404 invalid id', async () => {
             await api()
-                .get(SETTINGS.POSTS + '/' + 1234)
+                .get(SETTINGS.API.POSTS + '/' + 1234)
                 .expect(HttpStatus.NOT_FOUND);
         });
         it('Get a Post - 200', async () => {
-            newPost1IdUrl = SETTINGS.POSTS + '/' + newPost1.id;
+            newPost1IdUrl = SETTINGS.API.POSTS + '/' + newPost1.id;
             const res = await api()
                 .get(newPost1IdUrl)
                 .expect(HttpStatus.OK);
@@ -242,14 +241,14 @@ describe('Posts', () => {
     describe('PUT /posts/:id', () => {
         it('Update a Post - 404 invalid id', async () => {
             await api()
-                .put(SETTINGS.POSTS + '/' + 1234)
+                .put(SETTINGS.API.POSTS + '/' + 1234)
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.NOT_FOUND);
         });
         it('Update a Post - 404 no id', async () => {
             await api()
-                .put(SETTINGS.POSTS + '/')
+                .put(SETTINGS.API.POSTS + '/')
                 .send(validPost.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.NOT_FOUND);
@@ -388,7 +387,7 @@ describe('Posts', () => {
         });
         it('Update a Blog Id in the Post - 204', async () => {
             const blog = await api()
-                .post(SETTINGS.BLOGS)
+                .post(SETTINGS.API.BLOGS)
                 .send(validBlog.payload)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.CREATED);
@@ -409,20 +408,20 @@ describe('Posts', () => {
         });
         it('Updated Post is getting back with all Posts', async () => {
             await api()
-                .get(SETTINGS.POSTS)
+                .get(SETTINGS.API.POSTS)
                 .expect(HttpStatus.OK, [newPost1, newPost2]);
         });
     });
     describe('DELETE /posts/:id', () => {
         it('Delete a Post - 404 invalid id', async () => {
             await api()
-                .delete(SETTINGS.POSTS + '/' + 1234)
+                .delete(SETTINGS.API.POSTS + '/' + 1234)
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.NOT_FOUND);
         });
         it('Delete a Post - 404 no id', async () => {
             await api()
-                .delete(SETTINGS.POSTS + '/')
+                .delete(SETTINGS.API.POSTS + '/')
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.NOT_FOUND);
         });
@@ -450,8 +449,11 @@ describe('Posts', () => {
         });
         it('Deleted Post is not returned with all posts', async () => {
             await api()
-                .get(SETTINGS.POSTS)
+                .get(SETTINGS.API.POSTS)
                 .expect(HttpStatus.OK, [newPost2]);
         });
+    });
+    afterAll(async () => {
+        await client.close();
     });
 });

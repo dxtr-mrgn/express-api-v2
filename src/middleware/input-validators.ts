@@ -1,5 +1,5 @@
 import {body, param} from 'express-validator';
-import {db} from '../db/db';
+import {blogCollection} from '../repositories/blog-repository';
 
 export const paramIdValidator = param('id')
     .notEmpty();
@@ -101,7 +101,7 @@ export const postBlogIdValidator = body('blogId')
     .notEmpty().withMessage('blogId is required')
     .isString().withMessage('blogId should be string')
     .custom(async (value) => { // Make the custom function asynchronous
-        const blog = await db.blogs.find(blog => blog.id === value); // Await the promise here
+        const blog: any = (await blogCollection.find({id: value}, {projection: {_id: 0}}).toArray())[0];
         if (!blog) {
             throw new Error('blogId is invalid');
         }
