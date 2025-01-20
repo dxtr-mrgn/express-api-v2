@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb'
 import {SETTINGS} from '../settings';
 
 export const client = new MongoClient(SETTINGS.DB_URL);
+console.log('MongoDB Connected to: ' + SETTINGS.DB_URL);
 
 export const runDB = async (): Promise<boolean> => {
 
