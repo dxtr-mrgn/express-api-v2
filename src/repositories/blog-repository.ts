@@ -3,7 +3,6 @@ import {client} from '../db/mongodb';
 import {ObjectId} from 'mongodb';
 import {SETTINGS} from '../settings';
 
-
 export const blogCollection = client.db(SETTINGS.DB_NAME).collection('blogs');
 
 export const blogRepository = {

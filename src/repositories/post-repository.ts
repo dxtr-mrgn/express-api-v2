@@ -5,7 +5,6 @@ import {blogCollection} from './blog-repository';
 import {SETTINGS} from '../settings';
 
 const postCollection = client.db(SETTINGS.DB_NAME).collection('posts');
-console.log("XXX DB Name:", SETTINGS.DB_NAME);
 
 export const postRepository = {
     async deleteAllPosts() {
