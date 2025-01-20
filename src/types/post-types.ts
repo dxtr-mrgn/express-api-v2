@@ -11,5 +11,6 @@ export type  PostDBType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string | undefined
+    blogName: string | undefined,
+    createdAt: string
 }

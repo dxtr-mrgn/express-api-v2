@@ -14,7 +14,9 @@ export const blogRepository = {
             id: Date.now() + Math.random().toString(),
             name: blogInput.name,
             description: blogInput.description,
-            websiteUrl: blogInput.websiteUrl
+            websiteUrl: blogInput.websiteUrl,
+            createdAt: new Date().toISOString(),
+            isMembership: false
         };
         const res = await blogCollection.insertOne(newBlog);
         return await blogCollection.find({_id: new ObjectId(res.insertedId)}, {projection: {_id: 0}}).toArray();

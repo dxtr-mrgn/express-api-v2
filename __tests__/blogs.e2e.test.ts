@@ -143,16 +143,24 @@ describe('Blogs', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.CREATED);
 
-            expect(Object.keys(res.body)).toHaveLength(4);
+            expect(Object.keys(res.body)).toHaveLength(6);
 
             expect(typeof res.body.id).toBe('string');
             expect(typeof res.body.name).toBe('string');
             expect(typeof res.body.description).toBe('string');
             expect(typeof res.body.websiteUrl).toBe('string');
+            expect(typeof res.body.createdAt).toBe('string');
+            expect(typeof res.body.isMembership).toBe('boolean');
 
             expect(res.body.name).toBe(validBlog.payload.name);
             expect(res.body.description).toBe(validBlog.payload.description);
             expect(res.body.websiteUrl).toBe(validBlog.payload.websiteUrl);
+            expect(res.body.isMembership).toBe(false);
+            expect(res.body.createdAt).toBeTruthy();
+            const date = new Date(res.body.createdAt);
+            expect(date.toISOString()).toBe(res.body.createdAt);
+            // @ts-ignore
+            expect(date instanceof Date && !isNaN(date)).toBe(true);
 
             newBlog1 = res.body;
         });
@@ -163,16 +171,24 @@ describe('Blogs', () => {
                 .auth(SETTINGS.LOGIN, SETTINGS.PASSWORD)
                 .expect(HttpStatus.CREATED);
 
-            expect(Object.keys(res.body)).toHaveLength(4);
+            expect(Object.keys(res.body)).toHaveLength(6);
 
             expect(typeof res.body.id).toBe('string');
             expect(typeof res.body.name).toBe('string');
             expect(typeof res.body.description).toBe('string');
             expect(typeof res.body.websiteUrl).toBe('string');
+            expect(typeof res.body.createdAt).toBe('string');
+            expect(typeof res.body.isMembership).toBe('boolean');
 
             expect(res.body.name).toBe(validBlog.payload.name);
             expect(res.body.description).toBe(validBlog.payload.description);
             expect(res.body.websiteUrl).toBe(validBlog.payload.websiteUrl);
+            expect(res.body.isMembership).toBe(false);
+            expect(res.body.createdAt).toBeTruthy();
+            const date = new Date(res.body.createdAt);
+            expect(date.toISOString()).toBe(res.body.createdAt);
+            // @ts-ignore
+            expect(date instanceof Date && !isNaN(date)).toBe(true);
 
             newBlog2 = res.body;
         });
@@ -198,16 +214,24 @@ describe('Blogs', () => {
                 .expect(HttpStatus.OK);
 
             console.log(res.body)
-            expect(Object.keys(res.body)).toHaveLength(4);
+            expect(Object.keys(res.body)).toHaveLength(6);
 
             expect(typeof res.body.id).toBe('string');
             expect(typeof res.body.name).toBe('string');
             expect(typeof res.body.description).toBe('string');
             expect(typeof res.body.websiteUrl).toBe('string');
+            expect(typeof res.body.createdAt).toBe('string');
+            expect(typeof res.body.isMembership).toBe('boolean');
 
             expect(res.body.name).toBe(validBlog.payload.name);
             expect(res.body.description).toBe(validBlog.payload.description);
             expect(res.body.websiteUrl).toBe(validBlog.payload.websiteUrl);
+            expect(res.body.isMembership).toBe(false);
+            expect(res.body.createdAt).toBeTruthy();
+            const date = new Date(res.body.createdAt);
+            expect(date.toISOString()).toBe(res.body.createdAt);
+            // @ts-ignore
+            expect(date instanceof Date && !isNaN(date)).toBe(true);
         });
     });
     describe('PUT /blogs/:id', () => {
